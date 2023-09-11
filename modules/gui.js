@@ -1,5 +1,5 @@
-import { Vector3 } from "three";
-
+import { Object3D, Vector3 } from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 
 import createMaterial from "./material/createMaterial.js";
@@ -11,17 +11,10 @@ import numericReplacer from "./utils/numericReplacer.js";
 import download from "./utils/download.js";
 import handleUploadFile from "./utils/handleUploadFile.js";
 
-export default function createGUI(
-  teapot,
-  state,
-  scene,
-  cam,
-  renderer,
-  controls
-) {
+export default function createGUI({ teapot, state, scene, cam, renderer }) {
   const gui = new dat.GUI();
-
   let { palette, background, geometry, texture, camera } = state;
+  console.log(cam, camera);
 
   const forceTeapotUpdate = (seed) => {
     const {
@@ -47,6 +40,7 @@ export default function createGUI(
     if (background.hasFrame) createFrame(seed.palette.bg1);
   };
 
+  const controls = new OrbitControls(cam, renderer.domElement);
   /* -------------- PALETTE  -------------- */
 
   const paletteChg = (key, value) => {
@@ -362,15 +356,21 @@ export default function createGUI(
             state.background = uploadedSeed.background;
             state.palette = uploadedSeed.palette;
             state.camera = uploadedSeed.camera;
-
+            console.log(state);
             controls.object.position.copy(state.camera.position);
             controls.target.copy(state.camera.target);
+
+            cam.position.copy(state.camera.position);
+            const target = new Object3D();
+            target.position.copy(state.camera.target);
+            cam.lookAt(target.position);
             cam.updateProjectionMatrix();
+
             controls.update();
             forceTeapotUpdate(state);
             forceBackgroundUpdate(state);
             gui.destroy();
-            createGUI(teapot, state, scene, cam, renderer);
+            createGUI({ teapot, state, scene, cam, renderer });
           });
         },
       },
