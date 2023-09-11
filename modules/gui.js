@@ -359,18 +359,13 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
             console.log(state);
             controls.object.position.copy(state.camera.position);
             controls.target.copy(state.camera.target);
-
-            cam.position.copy(state.camera.position);
-            const target = new Object3D();
-            target.position.copy(state.camera.target);
-            cam.lookAt(target.position);
-            cam.updateProjectionMatrix();
-
             controls.update();
+
             forceTeapotUpdate(state);
             forceBackgroundUpdate(state);
-            gui.destroy();
-            createGUI({ teapot, state, scene, cam, renderer });
+            for (var i in gui.__controllers) {
+              gui.__controllers[i].updateDisplay();
+            }
           });
         },
       },
