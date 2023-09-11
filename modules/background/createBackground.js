@@ -2,7 +2,7 @@ import getGridSvg from "./getGridSvg.js";
 import getMoireeSvg from "./getMoireeSvg.js";
 import getDiagonalsSvg from "./getDiagonalSvg.js";
 import setMetaBg from "./setMetaBg.js";
-
+import createPipes from "./createPipesBg.js";
 const grey = "#F2F5F5";
 
 export const linGrad = (bg1, bg2) =>
@@ -20,17 +20,13 @@ export const svgToCss = (svg) =>
     `<svg  width="200" height="200" xmlns="http://www.w3.org/2000/svg" >${svg}</svg>`
   ).replace("#", "%23")})`;
 
-export default ({
-  scene,
-  background,
-  borderWidth = 2,
-  moireFreq = 4,
-  palette,
-}) => {
+export default ({ scene, background, bgState, palette }) => {
+  const { type, hasFrame, borderWidth, moireFreq } = background;
   const prev = scene.children.find((el) => el.name === "background");
   if (prev) {
     scene.remove(prev);
   }
+
   ({
     1: () => setBG("", linGrad(palette.bg1, palette.bg2)),
     2: () => setBG(palette.bg1, svgToCss(getGridSvg(palette.bg2, borderWidth))),
@@ -41,7 +37,8 @@ export default ({
     6: () => setBG("#000", svgToCss(getDiagonalsSvg(grey, borderWidth))),
     7: () => setMetaBg(scene, palette, "3"),
     8: () => setMetaBg(scene, palette, "5"),
-    // 9: createPipes,
+    9: () => setBG(palette.bg1, `url(${background.image})`),
+    // 9: () => createPipes({ bgState }),
     // 10: createStars,
-  })[background]();
+  })[type]();
 };

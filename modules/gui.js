@@ -1,5 +1,5 @@
 import { Object3D, Vector3 } from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from "../libraries/OrbitControls.js";
 import * as dat from "dat.gui";
 
 import createMaterial from "./material/createMaterial.js";
@@ -11,7 +11,14 @@ import numericReplacer from "./utils/numericReplacer.js";
 import download from "./utils/download.js";
 import handleUploadFile from "./utils/handleUploadFile.js";
 
-export default function createGUI({ teapot, state, scene, cam, renderer }) {
+export default function createGUI({
+  teapot,
+  state,
+  scene,
+  cam,
+  renderer,
+  bgState,
+}) {
   const gui = new dat.GUI();
   let { palette, background, geometry, texture, camera } = state;
   console.log(cam, camera);
@@ -28,11 +35,10 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
 
   const forceBackgroundUpdate = (seed) => {
     createBackground({
-      background: seed.background.type,
-      borderWidth: seed.background.borderWidth,
-      moireFreq: seed.background.moireFreq,
+      background: seed.background,
       palette: seed.palette,
       scene,
+      bgState,
     });
     // frame
     const frame = document.getElementById("frame");
@@ -53,11 +59,10 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
 
     // bg
     createBackground({
-      background: background.type,
-      borderWidth: background.borderWidth,
-      moireFreq: background.moireFreq,
+      background,
       palette,
       scene,
+      bgState,
     });
 
     // teapot
@@ -88,17 +93,17 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
       "Monochrome Parallels": 6,
       "Noisy Chess": 7,
       "Deep Camouflage": 8,
+      // "Background Image": 9,
       // "3D Pipes": 9,
       // Starfield: 10,
     })
     .onChange((newType) => {
       background.type = newType;
       createBackground({
-        background: background.type,
-        palette: state.palette,
-        borderWidth: background.borderWidth,
-        moireFreq: background.moireFreq,
+        background,
+        palette,
         scene,
+        bgState,
       });
     });
 
@@ -120,11 +125,10 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
     .onChange((borderWidth) => {
       background.borderWidth = borderWidth;
       createBackground({
-        background: background.type,
+        background,
         palette,
-        borderWidth: background.borderWidth,
-        moireFreq: background.moireFreq,
         scene,
+        bgState,
       });
     });
   backgroundFolder
@@ -132,11 +136,10 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
     .onChange((moireFreq) => {
       background.moireFreq = moireFreq;
       createBackground({
-        background: background.type,
+        background,
         palette,
-        borderWidth: background.borderWidth,
-        moireFreq: background.moireFreq,
         scene,
+        bgState,
       });
     });
 
@@ -304,16 +307,39 @@ export default function createGUI({ teapot, state, scene, cam, renderer }) {
     .min(0.01)
     .step(0.01);
 
-  animationFolder.add(state.animation, "rotation").onChange((isOn) => {
+  animationFolder.add(state.animation, "rotationX").onChange((isOn) => {
+    if (!isOn) {
+      teapot.rotation.x = 0;
+    }
+  });
+  animationFolder
+    .add(state.animation, "rotationVelX")
+    .max(1)
+    .min(0.001)
+    .step(0.001);
+
+  animationFolder.add(state.animation, "rotationY").onChange((isOn) => {
     if (!isOn) {
       teapot.rotation.y = 0;
     }
   });
   animationFolder
-    .add(state.animation, "rotationVel")
+    .add(state.animation, "rotationVelY")
     .max(1)
     .min(0.001)
     .step(0.001);
+
+  animationFolder.add(state.animation, "rotationZ").onChange((isOn) => {
+    if (!isOn) {
+      teapot.rotation.z = 0;
+    }
+  });
+  animationFolder
+    .add(state.animation, "rotationVelZ")
+    .max(1)
+    .min(0.001)
+    .step(0.001);
+
   animationFolder.open();
 
   /* -------------- SEED MANAGEMENT  -------------- */

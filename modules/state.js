@@ -7,6 +7,7 @@ let state = {
     hasFrame: true,
     borderWidth: 2,
     moireFreq: 4,
+    image: "/public/clouds.webp",
   },
 
   texture: {
@@ -57,8 +58,12 @@ let state = {
     stripesVel: 0.5,
     geometry: true,
     geometryVel: 0.9,
-    rotation: false,
-    rotationVel: 1,
+    rotationX: false,
+    rotationVelX: 1,
+    rotationY: false,
+    rotationVelY: 1,
+    rotationZ: false,
+    rotationVelZ: 1,
   },
 };
 

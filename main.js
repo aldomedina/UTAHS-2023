@@ -17,11 +17,15 @@ let teapot = createTeapot({
   texture: state.texture,
   palette: state.palette,
 });
-
+const bgState = {
+  pipes: false,
+  stars: false,
+};
 createBackground({
-  background: state.background.type,
+  background: state.background,
   palette: state.palette,
   scene,
+  bgState,
 });
 
 const clock = new Clock();
@@ -36,8 +40,12 @@ function animate() {
   if (state.animation.stripes)
     teapot.material.uniforms.u_time_stripes.value =
       time * state.animation.stripesVel;
-  if (state.animation.rotation)
-    teapot.rotation.y += 0.01 * state.animation.rotationVel;
+  if (state.animation.rotationX)
+    teapot.rotation.x += 0.01 * state.animation.rotationVelX;
+  if (state.animation.rotationY)
+    teapot.rotation.y += 0.01 * state.animation.rotationVelY;
+  if (state.animation.rotationZ)
+    teapot.rotation.z += 0.01 * state.animation.rotationVelZ;
   requestAnimationFrame(animate);
 }
 
@@ -45,4 +53,4 @@ animate();
 
 handleResize(camera, renderer, render, frame);
 
-createGUI({ teapot, state, scene, cam: camera, renderer });
+createGUI({ teapot, state, scene, cam: camera, renderer, bgState });
