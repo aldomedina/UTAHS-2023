@@ -372,11 +372,16 @@ export default function createGUI({
           handleUploadFile((uploadedSeed) => {
             console.log(uploadedSeed);
             state.animation.geometry = uploadedSeed.animation.geometry;
-            state.animation.rotation = uploadedSeed.animation.rotation;
             state.animation.stripes = uploadedSeed.animation.stripes;
             state.animation.geometryVel = uploadedSeed.animation.geometryVel;
-            state.animation.rotationVel = uploadedSeed.animation.rotationVel;
             state.animation.stripesVel = uploadedSeed.animation.stripesVel;
+            state.animation.rotationX = uploadedSeed.animation.rotationX;
+            state.animation.rotationY = uploadedSeed.animation.rotationY;
+            state.animation.rotationZ = uploadedSeed.animation.rotationZ;
+            state.animation.rotationVelX = uploadedSeed.animation.rotationVelX;
+            state.animation.rotationVelY = uploadedSeed.animation.rotationVelY;
+            state.animation.rotationVelZ = uploadedSeed.animation.rotationVelZ;
+
             state.texture = uploadedSeed.texture;
             state.geometry = uploadedSeed.geometry;
             state.background = uploadedSeed.background;
