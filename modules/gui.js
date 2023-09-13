@@ -93,7 +93,7 @@ export default function createGUI({
       "Monochrome Parallels": 6,
       "Noisy Chess": 7,
       "Deep Camouflage": 8,
-      // "Background Image": 9,
+      "Background Image": 9,
       // "3D Pipes": 9,
       // Starfield: 10,
     })
@@ -135,6 +135,19 @@ export default function createGUI({
     .add(background, "moireFreq", { small: 1.6, medium: 4, large: 8 })
     .onChange((moireFreq) => {
       background.moireFreq = moireFreq;
+      createBackground({
+        background,
+        palette,
+        scene,
+        bgState,
+      });
+    });
+
+  backgroundFolder
+    .add(background, "image")
+    .name("image path")
+    .onChange((imagePath) => {
+      background.image = imagePath;
       createBackground({
         background,
         palette,

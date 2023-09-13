@@ -7,7 +7,7 @@ let state = {
     hasFrame: true,
     borderWidth: 2,
     moireFreq: 4,
-    image: "/public/clouds.webp",
+    image: "/public/warhol-flowers.webp",
   },
 
   texture: {
