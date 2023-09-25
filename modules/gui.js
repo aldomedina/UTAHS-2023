@@ -365,7 +365,7 @@ export default function createGUI({
           const position = { ...new Vector3().copy(controls.object.position) };
           const seed = {
             ...state,
-            camera: { ...camera, position, target },
+            camera: { ...camera, position, target, fov: camera.fov },
           };
           download(
             JSON.stringify(seed, numericReplacer, 2),
@@ -405,6 +405,8 @@ export default function createGUI({
             controls.target.copy(state.camera.target);
             controls.update();
 
+            cam.fov = state.camera.fov;
+            cam.updateProjectionMatrix();
             forceTeapotUpdate(state);
             forceBackgroundUpdate(state);
             for (var i in gui.__controllers) {
