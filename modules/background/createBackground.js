@@ -20,9 +20,10 @@ export const svgToCss = (svg) =>
     `<svg  width="200" height="200" xmlns="http://www.w3.org/2000/svg" >${svg}</svg>`
   ).replace("#", "%23")})`;
 
-export default ({ scene, background, bgState, palette }) => {
+export default ({ scene, background, palette }) => {
   const { type, hasFrame, borderWidth, moireFreq } = background;
   const prev = scene.children.find((el) => el.name === "background");
+
   if (prev) {
     scene.remove(prev);
   }

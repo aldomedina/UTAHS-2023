@@ -1,10 +1,12 @@
 import { Clock } from "three";
+import * as dat from "dat.gui";
 import { createScene, handleResize } from "./modules/scene.js";
 import { createFrame } from "./modules/background/createFrame.js";
 
 import createTeapot from "./modules/teapot/createTeapot.js";
 import createBackground from "./modules/background/createBackground.js";
-import createGUI from "./modules/gui.js";
+// import createGUI from "./modules/gui.js";
+import createGUI from "./modules/GUI/index.js";
 
 import state from "./modules/state.js";
 
@@ -17,10 +19,12 @@ let teapot = createTeapot({
   texture: state.texture,
   palette: state.palette,
 });
+
 const bgState = {
   pipes: false,
   stars: false,
 };
+
 createBackground({
   background: state.background,
   palette: state.palette,
@@ -53,4 +57,6 @@ animate();
 
 handleResize(camera, renderer, render, frame);
 
-createGUI({ teapot, state, scene, cam: camera, renderer, bgState });
+const gui = new dat.GUI();
+
+createGUI(gui, { state, teapot, cam: camera, scene, renderer });

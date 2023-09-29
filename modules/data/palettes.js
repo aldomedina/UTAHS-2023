@@ -339,4 +339,5 @@ const palettes = [
     c: [[["ad037e", "dc0c9f"]], ["1d1d1d", "f45d04", "ebde06", "5b6ad1"]],
   },
 ];
+
 export default palettes;

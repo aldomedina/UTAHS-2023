@@ -10,6 +10,7 @@ import nc from "./utils/nc.js";
 import numericReplacer from "./utils/numericReplacer.js";
 import download from "./utils/download.js";
 import handleUploadFile from "./utils/handleUploadFile.js";
+import palettes from "./data/palettes.js";
 
 export default function createGUI({
   teapot,
@@ -21,8 +22,11 @@ export default function createGUI({
 }) {
   const gui = new dat.GUI();
   let { palette, background, geometry, texture, camera } = state;
-  console.log(cam, camera);
-
+  const updateGUI = () => {
+    for (var i in gui.__controllers) {
+      gui.__controllers[i].updateDisplay();
+    }
+  };
   const forceTeapotUpdate = (seed) => {
     const {
       geometry: { scaleX, scaleY, scaleZ },
@@ -79,6 +83,21 @@ export default function createGUI({
       .addColor(palette, key)
       .onFinishChange((value) => paletteChg(key, value))
   );
+
+  let formattedPalettes = {};
+  palettes.map((el) => (formattedPalettes[el.n] = el.n));
+
+  const dropdown = { preset: "Superhero" };
+  paletteFolder
+    .add(dropdown, "preset", formattedPalettes)
+    .onChange((newPaletteName) => {
+      const paletteName = palettes.find((el) => el.n === newPaletteName);
+      dropdown.preset = paletteName;
+      const newPalette = palettes.find((el) => el.n === newPaletteName).c;
+      const [[bg1, bg2], [col1, col2, col3, col4]] = newPalette;
+      palette = { bg1, bg2, col1, col2, col3, col4 };
+      updateGUI();
+    });
 
   /* -------------- BACKGROUND  -------------- */
 
@@ -400,7 +419,7 @@ export default function createGUI({
             state.background = uploadedSeed.background;
             state.palette = uploadedSeed.palette;
             state.camera = uploadedSeed.camera;
-            console.log(state);
+
             controls.object.position.copy(state.camera.position);
             controls.target.copy(state.camera.target);
             controls.update();
@@ -409,9 +428,7 @@ export default function createGUI({
             cam.updateProjectionMatrix();
             forceTeapotUpdate(state);
             forceBackgroundUpdate(state);
-            for (var i in gui.__controllers) {
-              gui.__controllers[i].updateDisplay();
-            }
+            updateGUI();
           });
         },
       },
