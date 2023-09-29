@@ -5,7 +5,6 @@ import { createFrame } from "./modules/background/createFrame.js";
 
 import createTeapot from "./modules/teapot/createTeapot.js";
 import createBackground from "./modules/background/createBackground.js";
-// import createGUI from "./modules/gui.js";
 import createGUI from "./modules/GUI/index.js";
 
 import state from "./modules/state.js";

@@ -14,6 +14,7 @@ import handleUploadFile from "../utils/handleUploadFile.js";
 import createMaterial from "../material/createMaterial.js";
 import createBackground from "../background/createBackground.js";
 import { createFrame } from "../background/createFrame.js";
+import handleTeapotType from "./handleTeapotType.js";
 
 export default function createGUI(
   gui,
@@ -29,6 +30,7 @@ export default function createGUI(
   handleTexture({ gui, state, teapot });
   handleCamera({ gui, state, cam });
   handleAnimation({ gui, state, teapot });
+  handleTeapotType({ gui, state, teapot, cam, controls });
 
   // seed management
   const saveJson = () => {
