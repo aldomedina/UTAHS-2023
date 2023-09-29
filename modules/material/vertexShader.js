@@ -39,12 +39,3 @@ void main() {
 }`;
 
 export default vertexShader;
-
-// TODO: Pasar esta logica a traves del uniform u_modifyUvX
-// ${
-//   txt === "Twill"
-//     ? true
-//     : R.random_bool(0.5)
-//     ? "vUv.x = (position.x - u_bBoxMin.x) / (u_bBoxMax.x - u_bBoxMin.x)"
-//     : ""
-// };
