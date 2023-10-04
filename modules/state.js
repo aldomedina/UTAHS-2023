@@ -9,7 +9,6 @@ let state = {
     moireFreq: 4,
     image: "/public/warhol-flowers.webp",
   },
-
   texture: {
     verticalStripes: false,
     type: textures[5].id,

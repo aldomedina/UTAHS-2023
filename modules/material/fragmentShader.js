@@ -138,6 +138,8 @@ const fragmentShader = /*glsl*/ `
         }
       }
     }
+    
+    // DROP
     if (u_textureId == 6.) {
       float lava=triangular(vUvB.x*2.)*
       dentada(vUvB.y * 10.) *
@@ -147,6 +149,8 @@ const fragmentShader = /*glsl*/ `
       );
       fCol=pal(lava, bg1g,col2,col1,col2);
     }
+
+
     // GRAIN
     if (vUv.y > u_grainTop || vUv.y < u_grainBottom) {
       fCol = addNoise(fCol);
