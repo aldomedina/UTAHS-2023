@@ -181,7 +181,13 @@ const fragmentShader = /*glsl*/ `
         }
       }
     }
-
+    
+    // BN STRIPES
+    if (u_textureId == 7.) {
+      float linePattern = fract(vUv.y * u_stripes);
+      vec3 lineColor = step(0.5, linePattern) > 0.5 ? vec3(1.0) : vec3(0.0);
+      fCol = mix(fCol, lineColor, step(u_chessBottom, vUv.y) * step(vUv.y, u_chessTop));
+    }
    
     // TODO: CHESS LOGIC
     

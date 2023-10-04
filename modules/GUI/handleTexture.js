@@ -8,6 +8,7 @@ export default function handleTexture({ gui, state, teapot }) {
       "Striped Chess": "4",
       Gradient: "5",
       Drops: "6",
+      "BN stripes": "7",
     })
     .onChange(
       (newTextureId) =>
@@ -50,7 +51,8 @@ export default function handleTexture({ gui, state, teapot }) {
     .step(0.01)
     .onChange(
       (chessMax) => (teapot.material.uniforms.u_chessTop.value = chessMax)
-    );
+    )
+    .name("textureMax");
   textureFolder
     .add(state.texture, "chessMin")
     .max(1)
@@ -58,7 +60,8 @@ export default function handleTexture({ gui, state, teapot }) {
     .step(0.01)
     .onChange(
       (chessMin) => (teapot.material.uniforms.u_chessBottom.value = chessMin)
-    );
+    )
+    .name("textureMin");
   textureFolder
     .add(state.texture, "grainMax")
     .max(1)

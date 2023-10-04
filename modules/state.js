@@ -11,7 +11,7 @@ let state = {
   },
   texture: {
     verticalStripes: false,
-    type: textures[5].id,
+    type: textures[6].id,
     strokeWidth: 0.08,
     stripes: 80,
     cell: 18,
