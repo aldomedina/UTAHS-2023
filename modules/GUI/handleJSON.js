@@ -6,6 +6,7 @@ import handleUploadFile from "../utils/handleUploadFile.js";
 import createMaterial from "../material/createMaterial.js";
 import createBackground from "../background/createBackground.js";
 import { createFrame } from "../background/createFrame.js";
+import handleJSONFromClipboard from "../utils/handleJSONFromClipboard.js";
 
 export default function handleJSON({
   gui,
@@ -29,51 +30,56 @@ export default function handleJSON({
     );
   };
 
-  const uploadJson = () =>
-    handleUploadFile((seed) => {
-      // update state
-      for (let key in seed) {
-        for (let subKey in seed[key]) {
-          state[key][subKey] = seed[key][subKey];
-        }
+  const handleUploadFromSeed = (seed) => {
+    // update state
+    for (let key in seed) {
+      for (let subKey in seed[key]) {
+        state[key][subKey] = seed[key][subKey];
       }
+    }
 
-      // update gui
-      for (var i in gui.__folders) {
-        for (var j in gui.__folders[i].__controllers) {
-          gui.__folders[i].__controllers[j].updateDisplay();
-        }
+    // update gui
+    for (var i in gui.__folders) {
+      for (var j in gui.__folders[i].__controllers) {
+        gui.__folders[i].__controllers[j].updateDisplay();
       }
+    }
 
-      // update camera
-      controls.object.position.copy(state.camera.position);
-      controls.target.copy(state.camera.target);
-      controls.update();
+    // update camera
+    controls.object.position.copy(state.camera.position);
+    controls.target.copy(state.camera.target);
+    controls.update();
 
-      cam.fov = state.camera.fov;
-      cam.updateProjectionMatrix();
+    cam.fov = state.camera.fov;
+    cam.updateProjectionMatrix();
 
-      // update teapot
-      const {
-        geometry: { scaleX, scaleY, scaleZ },
-      } = state;
-      teapot.scale.x = scaleX;
-      teapot.scale.y = scaleY;
-      teapot.scale.z = scaleZ;
-      teapot.material = createMaterial(state);
+    // update teapot
+    const {
+      geometry: { scaleX, scaleY, scaleZ },
+    } = state;
+    teapot.scale.x = scaleX;
+    teapot.scale.y = scaleY;
+    teapot.scale.z = scaleZ;
+    teapot.material = createMaterial(state);
 
-      // update background
-      createBackground({
-        background: state.background,
-        palette: state.palette,
-        scene,
-      });
-      // frame
-      const frame = document.getElementById("frame");
-      frame && frame.remove();
-      if (state.background.hasFrame) createFrame(state.palette.bg1);
+    // update background
+    createBackground({
+      background: state.background,
+      palette: state.palette,
+      scene,
     });
+    // frame
+    const frame = document.getElementById("frame");
+    frame && frame.remove();
+    if (state.background.hasFrame) createFrame(state.palette.bg1);
+  };
+
+  const uploadJson = () => handleUploadFile(handleUploadFromSeed);
+  const handleClipboard = () => handleJSONFromClipboard(handleUploadFromSeed);
 
   gui.add({ saveJson }, "saveJson").name("💾  SAVE JSON");
   gui.add({ uploadJson }, "uploadJson").name("⬆️  UPLOAD JSON");
+  gui
+    .add({ handleClipboard }, "handleClipboard")
+    .name("⬆️ UPLOAD JSON FROM CLIPBOARD");
 }
