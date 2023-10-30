@@ -30,6 +30,7 @@ export default function handleBackground({ gui, state, scene }) {
       "Noisy Chess": 7,
       "Deep Camouflage": 8,
       "Background Image": 9,
+      "Deeper Camouflage": 10,
       // "3D Pipes": 9,
       // Starfield: 10,
     })

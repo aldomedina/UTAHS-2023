@@ -1,14 +1,6 @@
 import { DoubleSide, Mesh, MeshBasicMaterial, SphereGeometry } from "three";
 import createMaterial from "../material/createMaterial.js";
 
-const noisyGeometryValues = {
-  density: 1.21,
-  strength: 2,
-  frequency: 0,
-  amplitude: 0,
-  intensity: 1.21,
-  period: 10,
-};
 const noisyTextureValues = {
   stripes: 0,
   cell: 30000,
@@ -20,7 +12,27 @@ const noisyTextureValues = {
   verticalStripes: false,
 };
 
-export default function setMetaBg(scene, palette, texture) {
+export default function setMetaBg(scene, palette, texture, highNoise) {
+  let noisyGeometryValues = {
+    density: 1.21,
+    strength: 2,
+    frequency: 0,
+    amplitude: 0,
+    intensity: 1.21,
+    period: 10,
+  };
+
+  if (highNoise) {
+    noisyGeometryValues = {
+      density: 5.157850217935629,
+      strength: 2,
+      frequency: 0,
+      amplitude: 0,
+      intensity: 1.9459512007725426,
+      period: 10,
+    };
+  }
+
   const geom = new SphereGeometry(500, 500, 500);
   const material = createMaterial({
     geometry: noisyGeometryValues,

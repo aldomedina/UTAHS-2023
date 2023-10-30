@@ -39,6 +39,7 @@ export default ({ scene, background, palette }) => {
     7: () => setMetaBg(scene, palette, "3"),
     8: () => setMetaBg(scene, palette, "5"),
     9: () => setBG(palette.bg1, `url(${background.image})`),
+    10: () => setMetaBg(scene, palette, "5", true),
     // 9: () => createPipes({ bgState }),
     // 10: createStars,
   })[type]();
