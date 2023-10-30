@@ -26,7 +26,8 @@ vec3 rotateY(vec3 v, float angle) {return rotation3dY(angle) * v;}
 
 void main() {
   float t = u_time * u_speed;
-  float distortion = pnoise((normal + t) * u_density, vec3(u_period)) * u_strength;vUv.y = (position.y - u_bBoxMin.y) / (u_bBoxMax.y - u_bBoxMin.y);
+  float distortion = pnoise((normal + t) * u_density, vec3(u_period)) * u_strength;
+  vUv.y = (position.y - u_bBoxMin.y) / (u_bBoxMax.y - u_bBoxMin.y);
   if (u_modifyUvX) {
     vUv.x = (position.x - u_bBoxMin.x) / (u_bBoxMax.x - u_bBoxMin.x);
   }
