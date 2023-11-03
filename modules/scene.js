@@ -12,6 +12,7 @@ const createScene = ({
   renderer.domElement.id = "uo";
   renderer.setSize(D, D);
   renderer.setPixelRatio(window.devicePixelRatio);
+
   document.body.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();

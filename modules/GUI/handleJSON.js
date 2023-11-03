@@ -15,6 +15,8 @@ export default function handleJSON({
   cam,
   teapot,
   scene,
+  pipes,
+  stars,
 }) {
   const saveJson = () => {
     const target = { ...new Vector3().copy(controls.target) };
@@ -63,11 +65,20 @@ export default function handleJSON({
     teapot.material = createMaterial(state);
 
     // update background
-    createBackground({
+    pipes.active = 0;
+    const { pipesGroup, pipesNodes, starsGroup, startsTgt } = createBackground({
       background: state.background,
       palette: state.palette,
       scene,
+      camera: state.camera,
+      texture: state.texture,
+      geometry: state.geometry,
     });
+
+    pipes.nodes = pipesNodes;
+    pipes.group = pipesGroup;
+    stars.stars = starsGroup;
+    stars.tgt = startsTgt;
     // frame
     const frame = document.getElementById("frame");
     frame && frame.remove();

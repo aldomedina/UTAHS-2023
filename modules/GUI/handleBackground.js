@@ -1,7 +1,15 @@
 import createBackground from "../background/createBackground.js";
 import { createFrame } from "../background/createFrame.js";
 
-export default function handleBackground({ gui, state, scene }) {
+export default function handleBackground({
+  gui,
+  state,
+  scene,
+  pipes,
+  stars,
+  controls,
+  renderer,
+}) {
   const backgroundFolder = gui.addFolder("background");
 
   backgroundFolder.add(state.background, "hasFrame").onChange((hasFrame) => {
@@ -12,12 +20,27 @@ export default function handleBackground({ gui, state, scene }) {
     }
   });
 
-  const handleBackgroundChange = () =>
-    createBackground({
+  const handleBackgroundChange = () => {
+    renderer.setClearColor(0xffffff, 0);
+    renderer.alpha = true;
+    pipes.active = 0;
+    state.camera.position = controls.object.position;
+    state.camera.target = controls.target;
+
+    const { pipesGroup, pipesNodes, starsGroup, startsTgt } = createBackground({
       background: state.background,
       palette: state.palette,
       scene,
+      camera: state.camera,
+      texture: state.texture,
+      geometry: state.geometry,
     });
+
+    pipes.nodes = pipesNodes;
+    pipes.group = pipesGroup;
+    stars.stars = starsGroup;
+    stars.tgt = startsTgt;
+  };
 
   backgroundFolder
     .add(state.background, "type", {
@@ -31,8 +54,8 @@ export default function handleBackground({ gui, state, scene }) {
       "Deep Camouflage": 8,
       "Background Image": 9,
       "Deeper Camouflage": 10,
-      // "3D Pipes": 9,
-      // Starfield: 10,
+      "3D Pipes": 11,
+      Starfield: 12,
     })
     .onChange(handleBackgroundChange);
 
@@ -53,4 +76,8 @@ export default function handleBackground({ gui, state, scene }) {
     .add(state.background, "image")
     .name("image path")
     .onChange(handleBackgroundChange);
+
+  gui
+    .add({ handleBackgroundChange }, "handleBackgroundChange")
+    .name("reset background");
 }

@@ -3,7 +3,7 @@ import backgrounds from "./data/backgrounds.js";
 
 let state = {
   background: {
-    type: backgrounds[7].id,
+    type: backgrounds[10].id,
     hasFrame: true,
     borderWidth: 2,
     moireFreq: 4,

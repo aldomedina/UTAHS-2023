@@ -1,7 +1,8 @@
 import { Box3, Vector3 } from "three";
-import R from "../utils/R.js";
+import R from "../../utils/R.js";
 
 const axes = ["x", "y", "z"];
+
 const gridBounds = new Box3(
   new Vector3(-10, -10, -10),
   new Vector3(10, 10, 10)
@@ -15,7 +16,6 @@ const addNewNode = (nodes) => {
   const newAxes = axes.filter((el) => el !== lastAxis);
   const axis = R.random_choice(newAxes);
   const newNode = latest.v.clone();
-  // Pipe Longitude
   const d = R.random_int(-10, 10);
   newNode[axis] = latest.v[axis] + d;
 

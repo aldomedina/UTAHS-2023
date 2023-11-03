@@ -47,4 +47,7 @@ export default function handleGeometry({ gui, state, teapot }) {
     .min(0.1)
     .step(0.01)
     .onChange((value) => (teapot.scale.z = value));
+  geometryFolder
+    .add({ tapa: false }, "tapa")
+    .onChange((value) => console.log(teapot.geometry));
 }

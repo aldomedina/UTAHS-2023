@@ -1,4 +1,4 @@
-import { Clock } from "three";
+import { Clock, Vector3 } from "three";
 import * as dat from "dat.gui";
 import { createScene, handleResize } from "./modules/scene.js";
 import { createFrame } from "./modules/background/createFrame.js";
@@ -6,8 +6,9 @@ import { createFrame } from "./modules/background/createFrame.js";
 import createTeapot from "./modules/teapot/createTeapot.js";
 import createBackground from "./modules/background/createBackground.js";
 import createGUI from "./modules/GUI/index.js";
-
+import handlePipesAnimation from "./modules/background/createPipesBg/handlePipesAnimation.js";
 import state from "./modules/state.js";
+import handleStarsAnimation from "./modules/background/createStarsBg/handleStarsAnimation.js";
 
 const { scene, camera, renderer } = createScene(state.camera);
 
@@ -19,17 +20,30 @@ let teapot = createTeapot({
   palette: state.palette,
 });
 
-const bgState = {
-  pipes: false,
-  stars: false,
+const pipes = {
+  group: false,
+  nodes: false,
+  active: 0,
 };
 
-createBackground({
+const stars = {
+  stars: false,
+  tgt: false,
+};
+
+const { pipesGroup, pipesNodes, starsGroup, startsTgt } = createBackground({
   background: state.background,
   palette: state.palette,
   scene,
-  bgState,
+  camera: state.camera,
+  texture: state.texture,
+  geometry: state.geometry,
 });
+
+pipes.group = pipesGroup;
+pipes.nodes = pipesNodes;
+stars.stars = starsGroup;
+stars.tgt = startsTgt;
 
 const clock = new Clock();
 const render = () => renderer.render(scene, camera);
@@ -38,6 +52,7 @@ function animate() {
   render();
 
   const time = clock.getElapsedTime();
+
   if (state.animation.geometry)
     teapot.material.uniforms.u_time.value = time * state.animation.geometryVel;
   if (state.animation.stripes)
@@ -49,6 +64,8 @@ function animate() {
     teapot.rotation.y += 0.01 * state.animation.rotationVelY;
   if (state.animation.rotationZ)
     teapot.rotation.z += 0.01 * state.animation.rotationVelZ;
+  if (pipes.group) handlePipesAnimation(pipes);
+  if (stars.stars) handleStarsAnimation(stars, camera);
   requestAnimationFrame(animate);
 }
 
@@ -58,4 +75,4 @@ handleResize(camera, renderer, render, frame);
 
 const gui = new dat.GUI();
 
-createGUI(gui, { state, teapot, cam: camera, scene, renderer });
+createGUI(gui, { state, teapot, cam: camera, scene, renderer, pipes, stars });

@@ -2,27 +2,23 @@ import getGridSvg from "./getGridSvg.js";
 import getMoireeSvg from "./getMoireeSvg.js";
 import getDiagonalsSvg from "./getDiagonalSvg.js";
 import setMetaBg from "./setMetaBg.js";
-import createPipes from "./createPipesBg.js";
-const grey = "#F2F5F5";
+import createPipesBg from "./createPipesBg/index.js";
+import { grey, linGrad, setBG, svgToCss, getThirdPoint } from "./bgUtils.js";
+import { Group, Vector3 } from "three";
+import createStarsBG from "./createStarsBg/index.js";
 
-export const linGrad = (bg1, bg2) =>
-  `linear-gradient(to top, ${bg1} 0%, ${bg2} 100%)`;
-
-export const setBG = (bc, bi) => {
-  const canvas = document.getElementById("uo");
-  canvas.style.backgroundSize = "cover";
-  canvas.style.backgroundColor = bc;
-  canvas.style.backgroundImage = bi;
-};
-
-export const svgToCss = (svg) =>
-  `url(data:image/svg+xml,${encodeURI(
-    `<svg  width="200" height="200" xmlns="http://www.w3.org/2000/svg" >${svg}</svg>`
-  ).replace("#", "%23")})`;
-
-export default ({ scene, background, palette }) => {
-  const { type, hasFrame, borderWidth, moireFreq } = background;
+export default ({ scene, background, palette, camera, texture, geometry }) => {
+  const { type, borderWidth, moireFreq } = background;
+  const {
+    position: { x: px, y: py, z: pz },
+    target: { x: tx, y: ty, z: tz },
+  } = camera;
   const prev = scene.children.find((el) => el.name === "background");
+
+  let pipesGroup = false,
+    pipesNodes = false,
+    starsGroup = false,
+    startsTgt = false;
 
   if (prev) {
     scene.remove(prev);
@@ -40,7 +36,33 @@ export default ({ scene, background, palette }) => {
     8: () => setMetaBg(scene, palette, "5"),
     9: () => setBG(palette.bg1, `url(${background.image})`),
     10: () => setMetaBg(scene, palette, "5", true),
-    // 9: () => createPipes({ bgState }),
-    // 10: createStars,
+    11: () => {
+      setBG("", linGrad(palette.bg1, palette.bg2));
+      const { pipes, nodes } = createPipesBg({ palette, texture });
+      pipesGroup = pipes;
+      pipesNodes = nodes;
+      const pipesPosition = getThirdPoint(
+        new Vector3(tx, ty, tz),
+        new Vector3(px, py, pz)
+      );
+      const distance = new Vector3(0, 0, 0).distanceTo(new Vector3(px, py, pz));
+      const scalar = distance / 28 + 1;
+      pipesGroup.scale.set(scalar, scalar, scalar);
+      pipesGroup.position.copy(pipesPosition);
+      pipesGroup.lookAt(new Vector3(0, 0, 0));
+      scene.add(pipes);
+    },
+    12: () => {
+      setBG("#000", linGrad("#000", "#000"));
+      starsGroup = createStarsBG({ geometry, camera });
+      startsTgt = getThirdPoint(
+        new Vector3(px, py, pz),
+        new Vector3(tx, ty, tz),
+        2
+      );
+      scene.add(starsGroup);
+    },
   })[type]();
+
+  return { pipesGroup, pipesNodes, starsGroup, startsTgt };
 };
